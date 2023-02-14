@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.1"
+  clock_loader:
+    dependency: "direct main"
+    description:
+      name: clock_loader
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   collection:
     dependency: transitive
     description:
@@ -85,7 +92,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0"
+    version: "0.18.0"
   js:
     dependency: transitive
     description:
@@ -128,6 +135,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.2"
+  percent_indicator:
+    dependency: "direct main"
+    description:
+      name: percent_indicator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.2.2"
   scrollable_positioned_list:
     dependency: transitive
     description:

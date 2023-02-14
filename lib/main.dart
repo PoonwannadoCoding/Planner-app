@@ -2,6 +2,7 @@ import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:simple_circular_progress_bar/simple_circular_progress_bar.dart';
+import 'package:slide_digital_clock/slide_digital_clock.dart';
 
 void main() => runApp(const MyApp());
 
@@ -62,24 +63,63 @@ class _HomePageState extends State<HomePage> {
     final now = DateTime.now();
 
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900],
 
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
 
-        children: [
-          Container(
-            margin: const EdgeInsets.only(left: 30),
-            child:
-            SimpleCircularProgressBar(
-              progressStrokeWidth: 30,
-              backStrokeWidth: 30,
-              size: 350,
-              mergeMode: true,
-              animationDuration: 30,
-            ),
+      body: Center(
+        // child: Column(
+        child: Container(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Colors.cyanAccent.shade700,
+                    Colors.blueGrey.shade900,
+                  ]
+              )
           ),
-        ],
+          child: Column(
+
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+
+              Container(
+                child: DigitalClock(
+                  hourMinuteDigitTextStyle: const TextStyle(fontSize: 100),
+                  colon: const Icon(Icons.ac_unit, size: 20),
+                  colonDecoration: BoxDecoration(
+                      border: Border.all(), shape: BoxShape.circle),
+                ),
+              ),
+
+
+              Container(
+                // margin: const EdgeInsets.only(left: 30),
+                child:
+                SimpleCircularProgressBar(
+                  progressStrokeWidth: 30,
+                  progressColors: const [Colors.cyan, Colors.white],
+
+                  backStrokeWidth: 30,
+                  size: 350,
+                  animationDuration: 30,
+                  onGetText: (double value) {
+                    return Text(
+                      '${value.toInt()}',
+                      style: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    );
+                  },
+
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
 
       bottomNavigationBar: BottomNavigationBar(
@@ -95,14 +135,14 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.business,
+              Icons.access_alarms_sharp,
               size: size_of_icon,
             ),
             label: 'Alarm',
           ),
           BottomNavigationBarItem(
             icon: Icon(
-                Icons.school,
+                Icons.access_alarm,
               size: size_of_icon,
             ),
             label: 'Timer',
@@ -111,7 +151,7 @@ class _HomePageState extends State<HomePage> {
         ],
         currentIndex: _selectedIndex,
         unselectedItemColor: Colors.cyan,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.tealAccent,
 
         selectedFontSize: 15,
         unselectedFontSize: 15,

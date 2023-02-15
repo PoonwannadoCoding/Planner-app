@@ -5,14 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:clock_loader/clock_loader.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 class home_screen extends StatefulWidget {
   const home_screen({Key? key}) : super(key: key);
   @override
   State<home_screen> createState() => _HomePageState();
 }
 
-  class _HomePageState extends State<home_screen> {
+
+
+
+  class _HomePageState extends State<home_screen> with TickerProviderStateMixin{
   int _selectedIndex = 0;
+  late AnimationController controller;
 
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -36,6 +41,17 @@ class home_screen extends StatefulWidget {
       _selectedIndex = index;
       print(index);
     });
+  }
+  @override
+  void initState() {
+    controller = AnimationController(
+
+      duration: const Duration(seconds: 60), vsync: this,
+    )..addListener(() {
+      setState(() {});
+    });
+    controller.repeat(reverse: true);
+    super.initState();
   }
 
 
@@ -78,15 +94,17 @@ class home_screen extends StatefulWidget {
                       border: Border.all(), shape: BoxShape.circle, color: Colors.white),
                 ),
               ),
+
               Container(
-                child: ClockLoader(
-                  clockLoaderModel: ClockLoaderModel(
-                    shapeOfParticles: ShapeOfParticlesEnum.circle,
-                    mainHandleColor: Colors.white,
-                    particlesColor: Colors.white,
-                  ),
+                margin: EdgeInsets.only(top: 40),
+                height: 300,
+                width: 300,
+                child: CircularProgressIndicator(
+                  value: DateTime.now().second.toDouble()/60,
+                  strokeWidth: 30,
+                  color: Colors.white,
                 ),
-              ),
+              )
             ],
           ),
         ),
@@ -96,6 +114,8 @@ class home_screen extends StatefulWidget {
       bottomNavigationBar:Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.centerRight,
             colors: [
               Colors.indigo.shade900,
               Colors.purple.shade700,

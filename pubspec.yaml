@@ -32,13 +32,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   cupertino_icons: ^1.0.2
   calendar_timeline: ^1.1.1
   simple_circular_progress_bar: ^1.0.2
   slide_digital_clock: ^1.0.3
   percent_indicator: ^4.2.2
   clock_loader: ^0.0.3
+
 
 
 
@@ -51,3 +51,9 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  fonts:
+    - family: Technology
+      fonts:
+        - asset: font/Technology.ttf
+

@@ -12,9 +12,6 @@ class home_screen extends StatefulWidget {
   State<home_screen> createState() => _HomePageState();
 }
 
-
-
-
   class _HomePageState extends State<home_screen> with TickerProviderStateMixin{
   int _selectedIndex = 0;
   late AnimationController controller;
@@ -39,7 +36,8 @@ class home_screen extends StatefulWidget {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      print(index);
+      // print(DateTime.now().year);
+
     });
   }
   @override
@@ -50,7 +48,7 @@ class home_screen extends StatefulWidget {
     )..addListener(() {
       setState(() {});
     });
-    controller.repeat(reverse: true);
+    controller.repeat(reverse: false);
     super.initState();
   }
 
@@ -58,53 +56,120 @@ class home_screen extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
     const double size_of_icon = 40;
-    final DateTime now = DateTime.now();
 
     return Scaffold(
+      // appBar: AppBar(
+      //    backgroundColor: Color(0xFF2D2F41),
+      //   title: Text("SLEEP CYCLE"),
+      // ),
 
 
       body: Center(
 
 
+
         child: Container(
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Colors.indigo.shade900,
-                    Colors.purple.shade700,
-                    Colors.pink.shade900,
-                  ]
-              )
+              // gradient: LinearGradient(
+              //     begin: Alignment.bottomLeft,
+              //     end: Alignment.topRight,
+              //     colors: [
+              //
+              //       Colors.pink.shade900,
+              //       Colors.purple.shade700,
+              //       Colors.indigo.shade900,
+              //     ]
+              // )
+            color: Color(0xFF2D2F41)
           ),
+
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
               Container(
-                child: DigitalClock(
-                  hourMinuteDigitTextStyle: const TextStyle(fontSize: 100,
-                      color: Colors.white
+                child: Text(
+                  "SLEEP CYCLE",
+                  style: TextStyle(
+                    fontSize: 80,
+                    fontFamily: 'Technology',
+                    color: Colors.white,
                   ),
-                  secondDigitTextStyle: const TextStyle(fontSize: 30,
-                      color: Colors.white),
-                  colon: const Icon(Icons.ac_unit, size: 20),
-                  colonDecoration: BoxDecoration(
-                      border: Border.all(), shape: BoxShape.circle, color: Colors.white),
+                ),
+              ),
+
+
+
+              Container(
+                margin: EdgeInsets.all(20),
+                // height: 180,
+                decoration: BoxDecoration(
+                  // color: Colors.purple.shade200,
+
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.centerRight,
+                      colors: [
+                        // Colors.indigo.shade900,
+                        // Colors.purple.shade700,
+                        // Colors.pinkAccent,
+
+                        Colors.blueGrey.shade400,
+                        Colors.blueGrey.shade900,
+
+                      ]
+                    ),
+
+                  borderRadius: const BorderRadius.all(
+                      Radius.circular(40)
+                  ),
+                ),
+
+                child: Column(
+                  children: [
+                    Container(
+
+                      child: DigitalClock(
+                        hourMinuteDigitTextStyle: const TextStyle(fontSize: 120,
+                            color: Colors.white,
+                            fontFamily: 'Technology'
+                        ),
+                        secondDigitTextStyle: const TextStyle(fontSize: 50,
+                            color: Colors.white,
+                        fontFamily: 'Technology'
+                          ),
+                        colon: const Icon(Icons.ac_unit, size: 20),
+                        colonDecoration: BoxDecoration(
+                            border: Border.all(), shape: BoxShape.circle, color: Colors.white),
+                      ),
+                    ),
+                    Container(
+                      child: Text(DateTime.now().day.toString() +"/" + DateTime.now().month.toString() + "/" + DateTime.now().year.toString(),
+                      style: const TextStyle(
+                        fontSize: 40,
+                        color: Colors.white,
+                        fontFamily: 'Technology',
+                      ),
+                      ),
+                    )
+                  ],
                 ),
               ),
 
               Container(
                 margin: EdgeInsets.only(top: 40),
-                height: 300,
-                width: 300,
+                height: 280,
+                width: 280,
                 child: CircularProgressIndicator(
                   value: DateTime.now().second.toDouble()/60,
-                  strokeWidth: 30,
+
+                  strokeWidth: 20,
                   color: Colors.white,
                 ),
-              )
+              ),
+
+
+
             ],
           ),
         ),
@@ -113,12 +178,15 @@ class home_screen extends StatefulWidget {
 
       bottomNavigationBar:Container(
         decoration: BoxDecoration(
+
           gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.centerRight,
+              // begin: Alignment.bottomLeft,
+              // end: Alignment.centerRight,
             colors: [
-              Colors.indigo.shade900,
-              Colors.purple.shade700,
+              // Colors.indigo.shade900,
+              // Colors.pinkAccent,
+              Color(0xFF2D2F41),
+              Colors.blueGrey.shade400,
 
             ]
           )
@@ -126,6 +194,7 @@ class home_screen extends StatefulWidget {
         child:
         BottomNavigationBar(
           backgroundColor: Colors.transparent,
+          // Color(0xFF2D2F41),
           items: const <BottomNavigationBarItem>[
 
             BottomNavigationBarItem(
@@ -153,10 +222,8 @@ class home_screen extends StatefulWidget {
             ),
           ],
           currentIndex: _selectedIndex,
-          unselectedItemColor: Colors.pink.shade200,
-          selectedItemColor: Colors.pinkAccent,
-
-
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.amber,
           selectedFontSize: 15,
           unselectedFontSize: 15,
           onTap: _onItemTapped,

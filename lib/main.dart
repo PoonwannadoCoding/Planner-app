@@ -2,6 +2,7 @@ import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:planner_app/home_screen.dart';
+import 'package:planner_app/timer.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:clock_loader/clock_loader.dart';
@@ -17,6 +18,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const home_screen(),
+        '/timer_screen': (context) => TimerScreen(),
       },
     );
   }

@@ -36,7 +36,14 @@ class home_screen extends StatefulWidget {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      // print(DateTime.now().year);
+
+      if (_selectedIndex == 0){
+        Navigator.pushNamed(context, '/');
+      }
+
+      if (_selectedIndex == 2){
+        Navigator.pushNamed(context, '/timer_screen');
+      }
 
     });
   }

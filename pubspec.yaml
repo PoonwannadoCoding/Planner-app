@@ -38,6 +38,8 @@ dependencies:
   slide_digital_clock: ^1.0.3
   percent_indicator: ^4.2.2
   clock_loader: ^0.0.3
+  numberpicker: ^2.1.1
+
 
 
 

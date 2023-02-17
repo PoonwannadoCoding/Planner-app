@@ -67,7 +67,7 @@ class timerPageState extends State<TimerScreen>{
 
         body: Center(
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
+
             children: [
               Container(
                 margin: const EdgeInsets.only(top: 85),
@@ -109,7 +109,10 @@ class timerPageState extends State<TimerScreen>{
                       children: [
                         Container(
 
-                          child: Row(
+                          child:
+
+                              isPushed == 0?
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -171,7 +174,7 @@ class timerPageState extends State<TimerScreen>{
                                       fontSize: 50
                                   ),
                                 ):
-                                Text(count_down_duration.inMinutes.toString(),
+                                Text((count_down_duration.inMinutes%60).toString(),
                                   style: const TextStyle(
                                       fontFamily: 'Technology',
                                       fontSize: 50,
@@ -209,7 +212,7 @@ class timerPageState extends State<TimerScreen>{
                                       fontSize: 50
                                   ),
                                 ):
-                                Text(count_down_duration.inSeconds.toString(),
+                                Text((count_down_duration.inSeconds%60).toString(),
                                   style: const TextStyle(
                                       fontFamily: 'Technology',
                                       fontSize: 50,
@@ -230,7 +233,78 @@ class timerPageState extends State<TimerScreen>{
 
 
                             ],
-                          ),
+                          ):
+                                  Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(top: 50, right: 40),
+                                          child: Text(count_down_duration.inHours.toString(),
+                                            style: const TextStyle(
+                                                fontFamily: 'Technology',
+                                                fontSize: 50,
+                                                color: Colors.white
+                                            ),
+                        ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 50, right: 40),
+                                          child: const Text(
+                                            "HH",
+                                            style: TextStyle(
+                                              fontFamily: 'Technology',
+                                              color: Colors.white,
+                                              fontSize: 23,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 50, right: 40),
+                                          child:
+                                          Text((count_down_duration.inMinutes%60).toString(),
+                                            style: const TextStyle(
+                                                fontFamily: 'Technology',
+                                                fontSize: 50,
+                                                color: Colors.white
+                                            ),),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 50, right: 40),
+                                          child: const Text(
+                                            "min",
+                                            style: TextStyle(
+                                              fontFamily: 'Technology',
+                                              color: Colors.white,
+                                              fontSize: 23,
+                                            ),
+                                          ),
+                                        ),
+
+                                        Container(
+                                          margin: EdgeInsets.only(top: 50, right: 30),
+                                          child:
+                                          Text((count_down_duration.inSeconds%60).toString(),
+                                            style: const TextStyle(
+                                                fontFamily: 'Technology',
+                                                fontSize: 50,
+                                                color: Colors.white
+                                            ),),
+                                        ),
+
+                                        Container(
+                                          margin: EdgeInsets.only(top: 50),
+                                          child: const Text(
+                                            "SEC",
+                                            style: TextStyle(
+                                              fontFamily: 'Technology',
+                                              color: Colors.white,
+                                              fontSize: 23,
+                                            ),
+                                          ),
+                                        ),
+                                      ]
+                                  ),
                         ),
 
                       ],

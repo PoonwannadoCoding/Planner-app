@@ -1,4 +1,3 @@
-import 'package:calendar_timeline/calendar_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:planner_app/home_screen.dart';
@@ -112,7 +111,6 @@ class _MyHomePageState extends State<MyHomePage>{
         )
     );
   }
-  
 }
 
 

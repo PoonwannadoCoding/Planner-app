@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -11,10 +13,44 @@ class TimerScreen extends StatefulWidget {
 }
 
 class timerPageState extends State<TimerScreen>{
-  int hour = 0;
-  int minuite = 0;
-  int second = 0;
+  Timer? countdownTimer;
+  static int hour = 0;
+  static int minuite = 0;
+  static int second = 0;
   int isPushed = 0;
+
+
+  Duration count_down_duration = Duration(hours: hour, minutes: minuite, seconds: second);
+  @override
+  void initState(){
+    super.initState();
+  }
+
+  void startTimer(){
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setContDown());
+  }
+
+  void stopTimer(){
+    setState(() => countdownTimer!.cancel());
+  }
+
+  void resetTimer(){
+    stopTimer();
+    setState(() => count_down_duration = const Duration());
+  }
+
+  void setContDown(){
+    final reduceSecondsBy = 1;
+    setState(() {
+      final seconds = count_down_duration.inSeconds - reduceSecondsBy;
+      if (count_down_duration.inSeconds == 0){
+        stopTimer();
+        isPushed = 0;
+      } else {
+        count_down_duration = Duration(seconds: seconds);
+      }
+    });
+  }
 
 
   static const TextStyle optionStyle =
@@ -34,7 +70,7 @@ class timerPageState extends State<TimerScreen>{
             // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 85),
+                margin: const EdgeInsets.only(top: 85),
                 child: const Text(
                   "COUNTDOWN",
                   style: TextStyle(
@@ -96,7 +132,7 @@ class timerPageState extends State<TimerScreen>{
                                       fontSize: 50
                                   ),
                                 ):
-                                    Text(hour.toString(),
+                                    Text(count_down_duration.inHours.toString(),
                                     style: const TextStyle(
                                         fontFamily: 'Technology',
                                         fontSize: 50,
@@ -135,7 +171,7 @@ class timerPageState extends State<TimerScreen>{
                                       fontSize: 50
                                   ),
                                 ):
-                                Text(minuite.toString(),
+                                Text(count_down_duration.inMinutes.toString(),
                                   style: const TextStyle(
                                       fontFamily: 'Technology',
                                       fontSize: 50,
@@ -173,7 +209,7 @@ class timerPageState extends State<TimerScreen>{
                                       fontSize: 50
                                   ),
                                 ):
-                                Text(second.toString(),
+                                Text(count_down_duration.inSeconds.toString(),
                                   style: const TextStyle(
                                       fontFamily: 'Technology',
                                       fontSize: 50,
@@ -213,6 +249,7 @@ class timerPageState extends State<TimerScreen>{
                           onPressed: (){
                             setState(() {
                               isPushed = 0;
+                              resetTimer();
                             });
                           },
                           backgroundColor: Color(0xFF2D2F41),
@@ -242,17 +279,24 @@ class timerPageState extends State<TimerScreen>{
                               (){
                             setState(() {
                               isPushed = 2;
+                              count_down_duration = Duration(hours: hour, minutes: minuite, seconds: second);
+                              startTimer();
+
                               // isPaused = false;
                             });
                           }: isPushed == 2?
                               (){setState(() {
                                 isPushed = 3;
+                                stopTimer();
+                                // startTimer();
+
                                 // isPaused = true;
                             }
                             );
                             }:
                               (){setState(() {
                             isPushed = 2;
+                            startTimer();
                             // isPaused = true;
                           }
                           );

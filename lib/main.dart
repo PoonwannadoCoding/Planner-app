@@ -42,20 +42,6 @@ class _MyHomePageState extends State<MyHomePage>{
 
 
 
-  // static const List<Widget> _widgetOptions = <Widget>[
-  //   Text(
-  //     'Index 0: Home',
-  //     style: optionStyle,
-  //   ),
-  //   Text(
-  //     'Index 1: Alarm',
-  //     style: optionStyle,
-  //   ),
-  //   Text(
-  //     'Index 2: Timer',
-  //     style: optionStyle,
-  //   ),
-  // ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -65,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage>{
 
   @override
   void initState() {
+    pageList.add(home_screen());
     pageList.add(home_screen());
     pageList.add(TimerScreen());
     super.initState();

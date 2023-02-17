@@ -4,6 +4,7 @@ import 'package:numberpicker/numberpicker.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({Key? key}) : super(key: key);
+  // Timer? countdownTimer;
 
   @override
   State<TimerScreen> createState() => timerPageState();
@@ -13,7 +14,7 @@ class timerPageState extends State<TimerScreen>{
   int hour = 0;
   int minuite = 0;
   int second = 0;
-  bool isPushed = true;
+  int isPushed = 0;
 
 
   static const TextStyle optionStyle =
@@ -23,10 +24,6 @@ class timerPageState extends State<TimerScreen>{
 
   @override
   Widget build(BuildContext context) {
-    const double size_of_icon = 40;
-
-
-
 
     return Scaffold(
       backgroundColor: Color(0xFF2D2F41),
@@ -34,9 +31,10 @@ class timerPageState extends State<TimerScreen>{
 
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
+                margin: EdgeInsets.only(top: 85),
                 child: const Text(
                   "COUNTDOWN",
                   style: TextStyle(
@@ -48,12 +46,11 @@ class timerPageState extends State<TimerScreen>{
               ),
 
               Container(
+                margin: const EdgeInsets.only(top: 85),
 
                 width: 380,
-                // height: 150,
+                height: 150,
                 decoration: BoxDecoration(
-
-
                   borderRadius: const BorderRadius.all(
                       Radius.circular(40)
                   ),
@@ -71,7 +68,7 @@ class timerPageState extends State<TimerScreen>{
                     ),
                   ),
 
-                  child: Center(
+                  // child: Center(
                     child: Column(
                       children: [
                         Container(
@@ -83,7 +80,7 @@ class timerPageState extends State<TimerScreen>{
 
                               Container(
 
-                                child: isPushed?
+                                child: isPushed == 0?
                                 NumberPicker(
                                   value: hour,
                                   minValue: 0,
@@ -116,13 +113,13 @@ class timerPageState extends State<TimerScreen>{
                                   style: TextStyle(
                                     fontFamily: 'Technology',
                                     color: Colors.white,
-                                    fontSize: 15,
+                                    fontSize: 23,
                                   ),
                                 ),
                               ),
 
                         Container(
-                                child: isPushed?
+                                child: isPushed == 0?
                                 NumberPicker(
                                   value: minuite,
                                   minValue: 0,
@@ -152,17 +149,16 @@ class timerPageState extends State<TimerScreen>{
                                   style: TextStyle(
                                     fontFamily: 'Technology',
                                     color: Colors.white,
-                                    fontSize: 15,
+                                    fontSize: 23,
                                   ),
                                 ),
                               ),
 
 
                               Container(
-
-
-                                child: isPushed?
+                                child: isPushed == 0?
                                 NumberPicker(
+
                                   value: second,
                                   minValue: 0,
                                   maxValue: 59,
@@ -186,13 +182,12 @@ class timerPageState extends State<TimerScreen>{
                               ),
 
                               Container(
-
                                 child: const Text(
                                   "SEC",
                                   style: TextStyle(
                                     fontFamily: 'Technology',
                                     color: Colors.white,
-                                    fontSize: 15,
+                                    fontSize: 23,
                                   ),
                                 ),
                               ),
@@ -206,23 +201,107 @@ class timerPageState extends State<TimerScreen>{
                     ),
 
                   ),
-
-              ),
-
               Container(
+                margin: EdgeInsets.only(top: 185),
                 child: Row(
-                  children: <Widget>[
-                    IconButton(
-                        onPressed: (){
-                          setState(() {
-                            isPushed = false;
-                          });
-                        },
-                        icon: const Icon(Icons.access_time_outlined)
-                    )
-                  ],
-                ),
-              )
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 20, left: 50),
+                    child: Row(
+                      children: <Widget>[
+                        FloatingActionButton.large(
+                          onPressed: (){
+                            setState(() {
+                              isPushed = 0;
+                            });
+                          },
+                          backgroundColor: Color(0xFF2D2F41),
+                          child: Text(
+                            "CANCLE",
+                            style: TextStyle(
+                                fontFamily: 'Technology',
+                                fontSize: 35,
+                                color: isPushed == 0?
+                                Colors.blueGrey.shade400:
+                                  Colors.white
+                            ),
+                          ),
+                        )
+
+                      ],
+                    ),
+                  ),
+
+
+                  Container(
+                    margin: EdgeInsets.only(top: 20, left: 120),
+                    child: Row(
+                      children: <Widget>[
+                        FloatingActionButton.large(
+                          onPressed: isPushed == 0?
+                              (){
+                            setState(() {
+                              isPushed = 2;
+                              // isPaused = false;
+                            });
+                          }: isPushed == 2?
+                              (){setState(() {
+                                isPushed = 3;
+                                // isPaused = true;
+                            }
+                            );
+                            }:
+                              (){setState(() {
+                            isPushed = 2;
+                            // isPaused = true;
+                          }
+                          );
+                          }
+
+                          ,
+                          backgroundColor: isPushed == 0?
+                          Colors.green.shade900:
+                              isPushed == 2?
+                              Colors.orange.shade600:
+                              Colors.green.shade900
+                            ,
+                          child: isPushed == 0?
+                          Text(
+                            "START",
+                            style: TextStyle(
+                                fontFamily: 'Technology',
+                                fontSize: 35,
+                                color: Colors.greenAccent.shade400
+                            ),
+                          ):
+                              isPushed ==2?
+                              const Text(
+                                  "PAUSE",
+                                  style: TextStyle(
+                                    fontFamily: 'Technology',
+                                    fontSize: 35,
+                                    color: Color(0xFFFFE082),
+                                  )
+                              ):
+                              const Text(
+                                  "CONTINUE",
+                                  style: TextStyle(
+                                    fontFamily: 'Technology',
+                                    fontSize: 25,
+                                    color: Colors.greenAccent,
+                                  )
+                              )
+
+                        ),
+
+                      ],
+                    ),
+                  )
+
+
+                ],
+              ),)
+
 
 
             ],

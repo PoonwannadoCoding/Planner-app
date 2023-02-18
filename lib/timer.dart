@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
@@ -45,7 +45,11 @@ class timerPageState extends State<TimerScreen>{
       final seconds = count_down_duration.inSeconds - reduceSecondsBy;
       if (count_down_duration.inSeconds == 0){
         stopTimer();
+        final player = AudioPlayer();
+        player.play(AssetSource('alarm1.mp3'));
+        
         isPushed = 0;
+
       } else {
         count_down_duration = Duration(seconds: seconds);
       }

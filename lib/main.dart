@@ -5,6 +5,8 @@ import 'package:planner_app/timer.dart';
 import 'package:slide_digital_clock/slide_digital_clock.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:clock_loader/clock_loader.dart';
+
+import 'alarm.dart';
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -51,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage>{
   @override
   void initState() {
     pageList.add(home_screen());
-    pageList.add(home_screen());
+    pageList.add(AlarmScreen());
     pageList.add(TimerScreen());
     super.initState();
   }

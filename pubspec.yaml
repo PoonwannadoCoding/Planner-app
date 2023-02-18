@@ -39,6 +39,8 @@ dependencies:
   percent_indicator: ^4.2.2
   clock_loader: ^0.0.3
   numberpicker: ^2.1.1
+  audioplayers: ^3.0.1
+  sleek_circular_slider: ^2.0.1
 
 
 
@@ -53,6 +55,9 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/
 
   fonts:
     - family: Technology

@@ -36,7 +36,11 @@ class timerPageState extends State<TimerScreen>{
 
   void resetTimer(){
     stopTimer();
-    setState(() => count_down_duration = const Duration());
+    hour = 0;
+    minuite = 0;
+    second = 0;
+    setState(() => count_down_duration = const Duration(hours: 0, minutes: 0, seconds: 0)
+    );
   }
 
   void setContDown(){
@@ -328,6 +332,7 @@ class timerPageState extends State<TimerScreen>{
                             setState(() {
                               isPushed = 0;
                               resetTimer();
+
                             });
                           },
                           backgroundColor: Color(0xFF2D2F41),

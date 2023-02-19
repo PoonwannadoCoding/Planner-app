@@ -2,6 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 class AlarmScreen extends StatefulWidget {
   const AlarmScreen({Key? key}) : super(key: key);
   // Timer? countdownTimer;
@@ -12,8 +15,10 @@ class AlarmScreen extends StatefulWidget {
 
 
 class alarmScreenState extends State<AlarmScreen>{
+  static double percents = 0;
   bool isSwitched =false;
   Timer? countdownTimer;
+  Timer? timer;
   String current_hour = DateTime.now().hour.toString();
   String current_min = DateTime.now().minute.toString();
   double record_mins = 0;
@@ -26,35 +31,52 @@ class alarmScreenState extends State<AlarmScreen>{
   static int awake_mm = 0;
   static int awake_ss = 0;
   Duration count_down_duration = Duration(hours: hh, minutes: mm, seconds: awake_ss);
-
+  int rec_sec = 0;
+  int current_sec = 0;
 
 
   int countcycle(){
-    if (record_mins~/60 > 1){
-      return (record_mins~/60)-1;
-    } else {
-      return (record_mins~/60);
-    }
 
+    return (record_mins~/90);
+  }
+
+  void runBar(){
+    timer = Timer.periodic(Duration(seconds: 1), (_) {
+
+      setState(() {
+        if (current_sec < rec_sec){
+          current_sec += 1;
+          percents = current_sec/rec_sec;
+        } else {
+          current_sec = 0;
+          resetTimer();
+          isSwitched =false;
+          percents = 0;
+        }
+      });
+
+    });
+  }
+  void dostuff(){
+    percents += 0.01;
+    print(rec_sec);
   }
 
   void initState(){
     current_time = "$current_hour:$current_min";
-    Timer.periodic(Duration(seconds: 1), (timer) {
+
+    Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
-        String update_hour = DateTime.now().hour.toString();
-        String update_min = DateTime.now().minute.toString();
-        current_time = "$update_hour:$update_min";
+        String updateHour = DateTime.now().hour.toString();
+        String updateMin = DateTime.now().minute.toString();
+        current_time = "$updateHour:$updateMin";
       });
     }
     );
     super.initState();
   }
 
-
-
   void startTimer(){
-
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setContDown());
   }
 
@@ -74,18 +96,18 @@ class alarmScreenState extends State<AlarmScreen>{
   void setContDown(){
     final reduceSecondsBy = 1;
     setState(() {
-      final seconds = count_down_duration.inSeconds - reduceSecondsBy;
+      int seconds = count_down_duration.inSeconds - reduceSecondsBy;
       if (count_down_duration.inSeconds == 0){
         stopTimer();
+        final player = AudioPlayer();
+        player.play(AssetSource('alarm1.mp3'));
       } else {
         count_down_duration = Duration(seconds: seconds);
       }
     });
   }
 
-
-
-
+  
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -94,10 +116,10 @@ class alarmScreenState extends State<AlarmScreen>{
 
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+
           children: [
             Container(
+              margin: const EdgeInsets.only(top: 85),
               child: const Text("SLEEP CYCLE",
               style: TextStyle(
                 color: Colors.white,
@@ -107,6 +129,7 @@ class alarmScreenState extends State<AlarmScreen>{
               ),
             ),
             Container(
+              margin: const EdgeInsets.only(top: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,7 +207,9 @@ class alarmScreenState extends State<AlarmScreen>{
             ),
 
             Container(
-              child: SleekCircularSlider(
+              margin: const EdgeInsets.only(top: 20),
+              child: isSwitched == false?
+              SleekCircularSlider(
                 appearance: CircularSliderAppearance(
                     size: 300,
                     customColors: CustomSliderColors(
@@ -213,7 +238,6 @@ class alarmScreenState extends State<AlarmScreen>{
                         mm = (record_mins % 60).toInt();
 
                         count_down_duration = Duration(hours: hh, minutes: mm, seconds: 0);
-
                         return "\t\tSleep time\n${count_down_duration.inHours} hour ${count_down_duration.inMinutes%60} min\n \t${count_down_duration.inSeconds%60} Second";
                       }
                     ),
@@ -240,15 +264,28 @@ class alarmScreenState extends State<AlarmScreen>{
                     } else {
                       awake_min = (awake_min + record_mins%60 - 60).toInt();
                     }
-
-
                   });
                 },
 
+              ):
+              CircularPercentIndicator(
+                radius: 150,
+                lineWidth: 10,
+                progressColor: Colors.orange.shade700,
+                percent: percents,
+                center: Text("\t\tSleep time\n${count_down_duration.inHours} hour ${count_down_duration.inMinutes%60} min\n \t${count_down_duration.inSeconds%60} Second",
+                style: const TextStyle(
+                  fontSize: 40,
+                  fontFamily: 'Technology',
+                  color: Colors.white
+                ),),
               ),
+
             ),
 
             Container(
+              margin: const EdgeInsets.only(top: 40),
+
               decoration: BoxDecoration(
                 color: Color(0xFF2D2F41),
 
@@ -291,6 +328,7 @@ class alarmScreenState extends State<AlarmScreen>{
             ),
 
             Container(
+              margin: const EdgeInsets.only(top: 20),
               child: Switch(
                 value: isSwitched,
                 onChanged: (bool value) {
@@ -299,13 +337,20 @@ class alarmScreenState extends State<AlarmScreen>{
                     int h = record_mins~/60;
                     int m = (record_mins%60).toInt();
                     count_down_duration = Duration(hours: h, minutes: m);
-                    startTimer();
+                    if(value == true){
+                      startTimer();
+                      rec_sec = count_down_duration.inSeconds;
+                      print(rec_sec);
+                      runBar();
+                    } else {
+                      resetTimer();
+                    }
+
                   });
                 },
                 activeTrackColor: Colors.orangeAccent,
                 activeColor: Colors.white,
               ),
-
             )
 
           ],

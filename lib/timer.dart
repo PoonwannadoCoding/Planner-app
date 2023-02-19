@@ -6,7 +6,6 @@ import 'package:numberpicker/numberpicker.dart';
 
 class TimerScreen extends StatefulWidget {
   const TimerScreen({Key? key}) : super(key: key);
-  // Timer? countdownTimer;
 
   @override
   State<TimerScreen> createState() => timerPageState();

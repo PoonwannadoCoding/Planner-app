@@ -12,6 +12,8 @@ class AlarmScreen extends StatefulWidget {
 
 
 class alarmScreenState extends State<AlarmScreen>{
+  bool isSwitched =false;
+  Timer? countdownTimer;
   String current_hour = DateTime.now().hour.toString();
   String current_min = DateTime.now().minute.toString();
   double record_mins = 0;
@@ -20,6 +22,12 @@ class alarmScreenState extends State<AlarmScreen>{
   static int hh = 0;
   static int mm = 0;
   late String current_time;
+  static int awake_hh = 0;
+  static int awake_mm = 0;
+  static int awake_ss = 0;
+  Duration count_down_duration = Duration(hours: hh, minutes: mm, seconds: awake_ss);
+
+
 
   int countcycle(){
     if (record_mins~/60 > 1){
@@ -42,6 +50,41 @@ class alarmScreenState extends State<AlarmScreen>{
     );
     super.initState();
   }
+
+
+
+  void startTimer(){
+
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (_) => setContDown());
+  }
+
+  void stopTimer(){
+    setState(() => countdownTimer!.cancel());
+  }
+
+  void resetTimer() {
+    stopTimer();
+    awake_hh = 0;
+    awake_mm = 0;
+    awake_ss = 0;
+    setState(() =>
+    count_down_duration = const Duration(hours: 0, minutes: 0, seconds: 0)
+    );
+  }
+  void setContDown(){
+    final reduceSecondsBy = 1;
+    setState(() {
+      final seconds = count_down_duration.inSeconds - reduceSecondsBy;
+      if (count_down_duration.inSeconds == 0){
+        stopTimer();
+      } else {
+        count_down_duration = Duration(seconds: seconds);
+      }
+    });
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +162,6 @@ class alarmScreenState extends State<AlarmScreen>{
                             Colors.indigo.shade900,
                             Colors.purple.shade700,
                             Colors.pinkAccent,
-                            //
                             // Colors.blueGrey.shade400,
                             // Colors.blueGrey.shade900,
                           ]
@@ -168,8 +210,11 @@ class alarmScreenState extends State<AlarmScreen>{
 
                       modifier: (double mins){
                         hh = record_mins~/60;
-                        mm = (record_mins%60).toInt();
-                        return "\t\tSleep time\n$hh hour $mm mins";
+                        mm = (record_mins % 60).toInt();
+
+                        count_down_duration = Duration(hours: hh, minutes: mm, seconds: 0);
+
+                        return "\t\tSleep time\n${count_down_duration.inHours} hour ${count_down_duration.inMinutes%60} min\n \t${count_down_duration.inSeconds%60} Second";
                       }
                     ),
                 ),
@@ -178,7 +223,7 @@ class alarmScreenState extends State<AlarmScreen>{
 
                 min: 0,
                 max: 1440,
-                initialValue: record_mins,
+                initialValue: count_down_duration.inMinutes.toDouble(),
                 onChange: (double mins){
                   setState(() {
                     record_mins = mins.toDouble();
@@ -193,7 +238,7 @@ class alarmScreenState extends State<AlarmScreen>{
                     if ((awake_min + record_mins%60).toInt() < 60){
                       awake_min = (awake_min + record_mins%60).toInt();
                     } else {
-                      awake_min = (record_mins%60).toInt();
+                      awake_min = (awake_min + record_mins%60 - 60).toInt();
                     }
 
 
@@ -213,7 +258,7 @@ class alarmScreenState extends State<AlarmScreen>{
               child: TextButton(
                 child: Text("${countcycle()} Cycle",
                   style:
-                  TextStyle(
+                  const TextStyle(
                     fontFamily: 'Technology',
                     fontSize: 30,
                     color: Colors.white
@@ -229,24 +274,38 @@ class alarmScreenState extends State<AlarmScreen>{
 
                     awake_hour = DateTime.now().hour.toInt();
                     awake_min = DateTime.now().minute.toInt();
-                    if ((awake_hour + record_mins/60).toInt() < 24){
-                      awake_hour = (awake_hour + record_mins/60).toInt();
+                    if ((awake_hour + record_mins~/60) < 24){
+                      awake_hour = (awake_hour + record_mins~/60);
                     } else {
-                      awake_hour = awake_hour + record_mins~/60.toInt() - 24;
+                      awake_hour = awake_hour + record_mins~/60 - 24;
                     }
 
                     if ((awake_min + record_mins%60).toInt() < 60){
                       awake_min = (awake_min + record_mins%60).toInt();
                     } else {
-                      awake_min = (record_mins%60).toInt();
+                      awake_min = (awake_min + record_mins%60 - 60).toInt();
                     }
-
-
-
-
                   });
                 },
               ),
+            ),
+
+            Container(
+              child: Switch(
+                value: isSwitched,
+                onChanged: (bool value) {
+                  setState(() {
+                    isSwitched = value;
+                    int h = record_mins~/60;
+                    int m = (record_mins%60).toInt();
+                    count_down_duration = Duration(hours: h, minutes: m);
+                    startTimer();
+                  });
+                },
+                activeTrackColor: Colors.orangeAccent,
+                activeColor: Colors.white,
+              ),
+
             )
 
           ],

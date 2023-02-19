@@ -14,11 +14,21 @@ class AlarmScreen extends StatefulWidget {
 class alarmScreenState extends State<AlarmScreen>{
   String current_hour = DateTime.now().hour.toString();
   String current_min = DateTime.now().minute.toString();
-
+  double record_mins = 0;
   int awake_hour = DateTime.now().hour.toInt();
   int awake_min = DateTime.now().minute.toInt();
-
+  static int hh = 0;
+  static int mm = 0;
   late String current_time;
+
+  int countcycle(){
+    if (record_mins~/60 > 1){
+      return (record_mins~/60)-1;
+    } else {
+      return (record_mins~/60);
+    }
+
+  }
 
   void initState(){
     current_time = "$current_hour:$current_min";
@@ -79,7 +89,7 @@ class alarmScreenState extends State<AlarmScreen>{
                     child: Center(
                       child: Text(
                         "$current_time",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 50,
                             fontFamily: 'Technology',
                             color: Colors.white
@@ -89,7 +99,7 @@ class alarmScreenState extends State<AlarmScreen>{
                   ),
 
                   Container(
-                    child: Text(
+                    child: const Text(
                       "=>",
                       style: TextStyle(
                           fontSize: 40,
@@ -133,22 +143,105 @@ class alarmScreenState extends State<AlarmScreen>{
 
             Container(
               child: SleekCircularSlider(
+                appearance: CircularSliderAppearance(
+                    size: 300,
+                    customColors: CustomSliderColors(
+                      trackColor: Colors.grey,
+                      progressBarColors: record_mins%90==0?
+                      [Colors.greenAccent,Colors.greenAccent]:
+                      [Colors.pinkAccent, Colors.pink.shade900],
+                      dotColor: Colors.pink.shade50,
+                    ),
+                    customWidths: CustomSliderWidths(
+                        trackWidth: 10,
+                        progressBarWidth: 15,
+                        shadowWidth: 20
+                    ),
+                    infoProperties: InfoProperties(
+                        mainLabelStyle: TextStyle(
+                          fontFamily: 'Technology',
+                          fontSize: 40,
+                          color: record_mins%90==0?
+                              Colors.greenAccent:
+                              Colors.white
+                        ),
+
+                      modifier: (double mins){
+                        hh = record_mins~/60;
+                        mm = (record_mins%60).toInt();
+                        return "\t\tSleep time\n$hh hour $mm mins";
+                      }
+                    ),
+                ),
+
+
+
                 min: 0,
                 max: 1440,
-                initialValue: 0,
+                initialValue: record_mins,
                 onChange: (double mins){
                   setState(() {
-                    if ((awake_hour + mins/60).toInt() < 24){
-                      awake_hour = (awake_hour + mins/60).toInt();
+                    record_mins = mins.toDouble();
+                    awake_hour = DateTime.now().hour.toInt();
+                    awake_min = DateTime.now().minute.toInt();
+                    if ((awake_hour + record_mins/60).toInt() < 24){
+                      awake_hour = (awake_hour + record_mins/60).toInt();
                     } else {
-                      awake_hour = 0;
+                      awake_hour = awake_hour + record_mins~/60.toInt() - 24;
                     }
 
-                    if ((awake_min + mins%60).toInt() < 60){
-                      awake_min = (awake_min + mins%60).toInt();
+                    if ((awake_min + record_mins%60).toInt() < 60){
+                      awake_min = (awake_min + record_mins%60).toInt();
                     } else {
-                      awake_min = 0;
+                      awake_min = (record_mins%60).toInt();
                     }
+
+
+                  });
+                },
+
+              ),
+            ),
+
+            Container(
+              decoration: BoxDecoration(
+                color: Color(0xFF2D2F41),
+
+                border: Border.all(color: Colors.purple.shade50),
+                borderRadius: const BorderRadius.all(Radius.circular(40)),
+              ),
+              child: TextButton(
+                child: Text("${countcycle()} Cycle",
+                  style:
+                  TextStyle(
+                    fontFamily: 'Technology',
+                    fontSize: 30,
+                    color: Colors.white
+                  ),
+                ),
+                onPressed: (){
+                  setState(() {
+                    if(record_mins + 90 < 1440) {
+                      record_mins = record_mins + 90;
+                    } else {
+                      record_mins = record_mins + 0;
+                    }
+
+                    awake_hour = DateTime.now().hour.toInt();
+                    awake_min = DateTime.now().minute.toInt();
+                    if ((awake_hour + record_mins/60).toInt() < 24){
+                      awake_hour = (awake_hour + record_mins/60).toInt();
+                    } else {
+                      awake_hour = awake_hour + record_mins~/60.toInt() - 24;
+                    }
+
+                    if ((awake_min + record_mins%60).toInt() < 60){
+                      awake_min = (awake_min + record_mins%60).toInt();
+                    } else {
+                      awake_min = (record_mins%60).toInt();
+                    }
+
+
 
 
                   });

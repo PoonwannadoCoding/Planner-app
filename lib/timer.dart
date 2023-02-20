@@ -12,6 +12,8 @@ class TimerScreen extends StatefulWidget {
 }
 
 class timerPageState extends State<TimerScreen>{
+  final player = AudioPlayer();
+  bool isDone = false;
   Timer? countdownTimer;
   static int hour = 0;
   static int minuite = 0;
@@ -42,14 +44,23 @@ class timerPageState extends State<TimerScreen>{
     );
   }
 
+  void playAlarm() async{
+    player.play(AssetSource('alarm1.mp3'));
+  }
+  void loop(){
+    player.setReleaseMode(ReleaseMode.loop);
+  }
+
+
   void setContDown(){
     final reduceSecondsBy = 1;
     setState(() {
       final seconds = count_down_duration.inSeconds - reduceSecondsBy;
       if (count_down_duration.inSeconds == 0){
         stopTimer();
-        final player = AudioPlayer();
-        player.play(AssetSource('alarm1.mp3'));
+        playAlarm();
+        loop();
+        isDone = true;
         
         isPushed = 0;
 
@@ -58,6 +69,8 @@ class timerPageState extends State<TimerScreen>{
       }
     });
   }
+
+
 
 
   static const TextStyle optionStyle =
@@ -326,11 +339,34 @@ class timerPageState extends State<TimerScreen>{
                     margin: EdgeInsets.only(top: 20, left: 50),
                     child: Row(
                       children: <Widget>[
+                        isDone?
+                        FloatingActionButton.large(
+                          onPressed: (){
+                            setState(() {
+                              resetTimer();
+                              player.stop();
+                              isDone = true;
+
+                            });
+                          },
+                          backgroundColor: Color(0xFF2D2F41),
+                          child: const Text(
+                            "STOP",
+                            style: TextStyle(
+                                fontFamily: 'Technology',
+                                fontSize: 35,
+                                color: Colors.white
+                            ),
+                          ),
+                        ):
+
+
                         FloatingActionButton.large(
                           onPressed: (){
                             setState(() {
                               isPushed = 0;
                               resetTimer();
+                              // player.stop();
 
                             });
                           },
@@ -342,10 +378,11 @@ class timerPageState extends State<TimerScreen>{
                                 fontSize: 35,
                                 color: isPushed == 0?
                                 Colors.blueGrey.shade400:
-                                  Colors.white
+                                Colors.white
                             ),
                           ),
                         )
+
 
                       ],
                     ),

@@ -17,8 +17,10 @@ class AlarmScreen extends StatefulWidget {
 class alarmScreenState extends State<AlarmScreen>{
   static double percents = 0;
   bool isSwitched =false;
+  final player = AudioPlayer();
   Timer? countdownTimer;
   Timer? timer;
+  bool isDone = false;
   String current_hour = DateTime.now().hour.toString();
   String current_min = DateTime.now().minute.toString();
   double record_mins = 0;
@@ -52,6 +54,7 @@ class alarmScreenState extends State<AlarmScreen>{
           current_sec = 0;
           percents = 0;
           resetTimer();
+          isDone = true;
           isSwitched =false;
         }
       });
@@ -96,13 +99,26 @@ class alarmScreenState extends State<AlarmScreen>{
       int seconds = count_down_duration.inSeconds - reduceSecondsBy;
       if (count_down_duration.inSeconds == 0){
         stopTimer();
-        final player = AudioPlayer();
-        player.play(AssetSource('alarm1.mp3'));
+
+        playAlarm();
+        loop();
+
+
+
+
       } else {
         count_down_duration = Duration(seconds: seconds);
       }
     });
   }
+
+  void playAlarm() async{
+    player.play(AssetSource('alarm1.mp3'));
+  }
+  void loop(){
+    player.setReleaseMode(ReleaseMode.loop);
+  }
+
 
   
   @override
@@ -348,8 +364,21 @@ class alarmScreenState extends State<AlarmScreen>{
                 activeTrackColor: Colors.orangeAccent,
                 activeColor: Colors.white,
               ),
-            )
+            ),
 
+            Container(
+              child: isDone?
+              IconButton(
+                onPressed: (){
+                  setState(() {
+                    player.stop();
+                    isDone = false;
+                  });
+                },
+                icon: Icon(Icons.stop_circle_outlined, color: Colors.white, size: 40,),
+              ):
+              Text("")
+            ),
           ],
         ),
       ),

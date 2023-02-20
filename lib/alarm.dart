@@ -48,18 +48,15 @@ class alarmScreenState extends State<AlarmScreen>{
           current_sec += 1;
           percents = current_sec/rec_sec;
         } else {
+          rec_sec = 0;
           current_sec = 0;
+          percents = 0;
           resetTimer();
           isSwitched =false;
-          percents = 0;
         }
       });
 
     });
-  }
-  void dostuff(){
-    percents += 0.01;
-    print(rec_sec);
   }
 
   void initState(){
